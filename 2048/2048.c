@@ -43,12 +43,8 @@ int board[SIZE][SIZE] = {0};
 
 int main() {
   init_game();
-  print_game();
 
-  while (!game_over) {
-  
-    create_value();
-    print_game();
+  while (!game_over) { 
 
     movement = getchar();
     while (getchar() != '\n'); // Clean buffer
@@ -56,6 +52,8 @@ int main() {
     set_direction();
     move_numbers();
 
+    create_value();
+    print_game();
   }
 
   end_game();
@@ -65,12 +63,8 @@ int main() {
 
 void init_game() {
   srand(time(NULL));
-
   create_value();
-
-  // Configure Map
   print_game();  
-  
 }
 
 void print_game() {
@@ -102,6 +96,18 @@ void end_game() {
 }
 
 void create_value() {
+
+  int valid_positions = 0;
+
+  for (int i = 0; i < SIZE; i++) 
+    for (int j = 0; j < SIZE; j++) 
+      if (board[i][j] == 0)
+        valid_positions++;
+
+  if (valid_positions == 0) {
+    game_over = 1;
+    return;
+  }
 
   do {
     new_value.x = rand() % SIZE; 
@@ -142,17 +148,23 @@ void move_numbers() {
 }
 
 void move_up() {
+  // travel board
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
+      // search numbers to move
       if (board[i][j] != BOARD_VOID) {
+        // number to move
         for (int k = 0; k < i; k++) {
+          // empty position (valid movement)
           if (board[i-1-k][j] == BOARD_VOID) {
             board[i-1-k][j] = board[i-k][j];
             board[i-k][j] = BOARD_VOID;
           }
+          // update value
           if (board[i-1-k][j] == board[i-k][j]) {
             board[i-1-k][j] = board[i-k][j] + 1;
             board[i-k][j] = BOARD_VOID;
+            break;
           }
         }
       }
@@ -164,6 +176,28 @@ void move_down() {
 }
 
 void move_left() {
+  // travel board
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      // search numbers to move
+      if (board[i][j] != BOARD_VOID) {
+        // number to move
+        for (int k = 0; k < j; k++) {
+          // empty position (valid movement)
+          if (board[i][j-1-k] == BOARD_VOID) {
+            board[i][j-1-k] = board[i][j-k];
+            board[i][j-k] = BOARD_VOID;
+          }
+          // update value
+          if (board[i][j-1-k] == board[i][j-k]) {
+            board[i][j-1-k] = board[i][j-k] + 1;
+            board[i][j-k] = BOARD_VOID;
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 
 void move_right() {
