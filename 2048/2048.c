@@ -152,7 +152,7 @@ void move_up() {
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
       // search numbers to move
-      if (board[i][j] != BOARD_VOID) {
+      if ((board[i][j] != BOARD_VOID) && (i != 0)) {
         // number to move
         for (int k = 0; k < i; k++) {
           // empty position (valid movement)
@@ -173,6 +173,28 @@ void move_up() {
 }
 
 void move_down() {
+  // travel board
+  for (int i = SIZE - 1; i >= 0; i--) {
+    for (int j = 0; j < SIZE; j++) {
+      // search numbers to move
+      if ((board[i][j] != BOARD_VOID) && (i != SIZE - 1)) {
+        // number to move
+        for (int k = 0; k < SIZE - i - 1; k++) {
+          // empty position (valid movement)
+          if (board[i+1+k][j] == BOARD_VOID) {
+            board[i+1+k][j] = board[i+k][j];
+            board[i+k][j] = BOARD_VOID;
+          }
+          // update value
+          if (board[i+1+k][j] == board[i+k][j]) {
+            board[i+1+k][j] = board[i+k][j] + 1;
+            board[i+k][j] = BOARD_VOID;
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 
 void move_left() {
@@ -180,7 +202,7 @@ void move_left() {
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
       // search numbers to move
-      if (board[i][j] != BOARD_VOID) {
+      if ((board[i][j] != BOARD_VOID) && (j != 0)) {
         // number to move
         for (int k = 0; k < j; k++) {
           // empty position (valid movement)
@@ -201,5 +223,26 @@ void move_left() {
 }
 
 void move_right() {
+  // travel board
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = SIZE - 1; j >= 0; j--) {
+      // search numbers to move
+      if ((board[i][j] != BOARD_VOID) && (j != SIZE - 1)) {
+        // number to move
+        for (int k = 0; k < SIZE - j - 1; k++) {
+          // empty position (valid movement)
+          if (board[i][j+1+k] == BOARD_VOID) {
+            board[i][j+1+k] = board[i][j+k];
+            board[i][j+k] = BOARD_VOID;
+          }
+          // update value
+          if (board[i][j+1+k] == board[i][j+k]) {
+            board[i][j+1+k] = board[i][j+k] + 1;
+            board[i][j+k] = BOARD_VOID;
+            break;
+          }
+        }
+      }
+    }
+  }
 }
-
